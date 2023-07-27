@@ -96,8 +96,8 @@
                 <version>3.8.0</version>
                 <configuration>
                     <encoding>UTF-8</encoding>
-                    <source>${jdk.version}</source>
-                    <target>${jdk.version}</target>
+                    <source>19</source>
+                    <target>19</target>
                 </configuration>
                 <dependencies>
                     <dependency>
@@ -580,7 +580,7 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <version>1.18.4</version>
+            <version>1.18.28</version>
             <scope>test</scope>
         </dependency>
 
