@@ -56,6 +56,12 @@ public class JSONPath implements JSONAware {
 
     private boolean                                ignoreNullValue;
 
+    private static final long YEAR = 0x7c64634977425edcL; //TypeUtils.fnv1a_64("year");
+    private static final long MONTH = 0xf4bdc3936faf56a5L; //TypeUtils.fnv1a_64("month");
+    private static final long DAY = 0xca8d3918f4578f1dL; // TypeUtils.fnv1a_64("day");
+    private static final long HOUR = 0x407efecc7eb5764fL; //TypeUtils.fnv1a_64("hour");
+    private static final long MINUTE = 0x5bb2f9bdf2fad1e9L; //TypeUtils.fnv1a_64("minute");
+    private static final long SECOND = 0xa49985ef4cee20bdL; //TypeUtils.fnv1a_64("second");
     public JSONPath(String path){
         this(path, SerializeConfig.getGlobalInstance(), ParserConfig.getGlobalInstance(), true);
     }
@@ -3841,27 +3847,20 @@ public class JSONPath implements JSONAware {
     final static long LENGTH = 0xea11573f1af59eb5L; // TypeUtils.fnv1a_64("length");
 
     protected Object getPropertyValue(Object currentObject, String propertyName, long propertyNameHash) {
-        if (currentObject == null) {
-            return null;
-        }
+        if (currentObject == null) return null;
 
         if (currentObject instanceof String) {
             try {
-                JSONObject object = (JSONObject) JSON.parse((String) currentObject, parserConfig);
-                currentObject = object;
-            } catch (Exception ex) {
-                // skip
-            }
+                currentObject = (JSONObject) JSON.parse((String) currentObject, parserConfig);
+            } catch (Exception ex) {}
         }
 
-        if (currentObject instanceof Map) {
-            Map map = (Map) currentObject;
+        if (currentObject instanceof Map map) {
             Object val = map.get(propertyName);
 
             if (val == null && (SIZE == propertyNameHash || LENGTH == propertyNameHash)) {
                 val = map.size();
             }
-
             return val;
         }
 
@@ -3876,9 +3875,7 @@ public class JSONPath implements JSONAware {
             }
         }
 
-        if (currentObject instanceof List) {
-            List list = (List) currentObject;
-
+        if (currentObject instanceof List list) {
             if (SIZE == propertyNameHash || LENGTH == propertyNameHash) {
                 return list.size();
             }
@@ -3888,7 +3885,6 @@ public class JSONPath implements JSONAware {
             for (int i = 0; i < list.size(); ++i) {
                 Object obj = list.get(i);
 
-                //
                 if (obj == list) {
                     if (fieldValues == null) {
                         fieldValues = new JSONArray(list.size());
@@ -3898,8 +3894,7 @@ public class JSONPath implements JSONAware {
                 }
 
                 Object itemValue = getPropertyValue(obj, propertyName, propertyNameHash);
-                if (itemValue instanceof Collection) {
-                    Collection collection = (Collection) itemValue;
+                if (itemValue instanceof Collection collection) {
                     if (fieldValues == null) {
                         fieldValues = new JSONArray(list.size());
                     }
@@ -3915,45 +3910,36 @@ public class JSONPath implements JSONAware {
             if (fieldValues == null) {
                 fieldValues = Collections.emptyList();
             }
-
             return fieldValues;
         }
 
-        if (currentObject instanceof Object[]) {
-            Object[] array = (Object[]) currentObject;
-
+        if (currentObject instanceof Object[] array) {
             if (SIZE == propertyNameHash || LENGTH == propertyNameHash) {
                 return array.length;
             }
 
             List<Object> fieldValues = new JSONArray(array.length);
 
-            for (int i = 0; i < array.length; ++i) {
-                Object obj = array[i];
-
-                //
+            for (Object obj : array) {
                 if (obj == array) {
                     fieldValues.add(obj);
                     continue;
                 }
 
                 Object itemValue = getPropertyValue(obj, propertyName, propertyNameHash);
-                if (itemValue instanceof Collection) {
-                    Collection collection = (Collection) itemValue;
+                if (itemValue instanceof Collection collection) {
                     fieldValues.addAll(collection);
                 } else if (itemValue != null || !ignoreNullValue) {
                     fieldValues.add(itemValue);
                 }
             }
-
             return fieldValues;
         }
 
-        if (currentObject instanceof Enum) {
+        if (currentObject instanceof Enum e) {
             final long NAME = 0xc4bcadba8e631b86L; // TypeUtils.fnv1a_64("name");
             final long ORDINAL = 0xf1ebc7c20322fc22L; //TypeUtils.fnv1a_64("ordinal");
 
-            Enum e = (Enum) currentObject;
             if (NAME == propertyNameHash) {
                 return e.name();
             }
@@ -3963,15 +3949,7 @@ public class JSONPath implements JSONAware {
             }
         }
 
-        if (currentObject instanceof Calendar) {
-            final long YEAR = 0x7c64634977425edcL; //TypeUtils.fnv1a_64("year");
-            final long MONTH = 0xf4bdc3936faf56a5L; //TypeUtils.fnv1a_64("month");
-            final long DAY = 0xca8d3918f4578f1dL; // TypeUtils.fnv1a_64("day");
-            final long HOUR = 0x407efecc7eb5764fL; //TypeUtils.fnv1a_64("hour");
-            final long MINUTE = 0x5bb2f9bdf2fad1e9L; //TypeUtils.fnv1a_64("minute");
-            final long SECOND = 0xa49985ef4cee20bdL; //TypeUtils.fnv1a_64("second");
-
-            Calendar e = (Calendar) currentObject;
+        if (currentObject instanceof Calendar e) {
             if (YEAR == propertyNameHash) {
                 return e.get(Calendar.YEAR);
             }
@@ -3991,9 +3969,7 @@ public class JSONPath implements JSONAware {
                 return e.get(Calendar.SECOND);
             }
         }
-
         return null;
-        //throw new JSONPathException("jsonpath error, path " + path + ", segement " + propertyName);
     }
     
     @SuppressWarnings("rawtypes")
