@@ -52,7 +52,7 @@ import java.util.regex.Pattern;
  * @author wenshao[szujobs@hotmail.com]
  */
 public class TypeUtils {
-    private static final Pattern NUMBER_WITH_TRAILING_ZEROS_PATTERN = Pattern.compile("\\.0*$");
+    private static final Pattern NO_TRAILING_ZERO_PATTERN = Pattern.compile("\\.0*$");
 
     public static boolean compatibleWithJavaBean = false;
     /**
@@ -988,7 +988,7 @@ public class TypeUtils {
                 strVal = strVal.replaceAll(",", "");
             }
 
-            Matcher matcher = NUMBER_WITH_TRAILING_ZEROS_PATTERN.matcher(strVal);
+            Matcher matcher = NO_TRAILING_ZERO_PATTERN.matcher(strVal);
             if (matcher.find()) {
                 strVal = matcher.replaceAll("");
             }
