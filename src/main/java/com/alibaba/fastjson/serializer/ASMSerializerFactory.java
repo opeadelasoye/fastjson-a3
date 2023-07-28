@@ -176,7 +176,7 @@ public class ASMSerializerFactory implements Opcodes {
                                                                                                         .visitEnd();
         }
 
-        MethodVisitor mw = new MethodWriter(cw, ACC_PUBLIC, "<init>", "(" + desc(SerializeBeanInfo.class) + ")V", null, null);
+        MethodVisitor mw = new MethodWriter(cw, ACC_PUBLIC, "<init>", "(" + desc(SerializeBeanInfo.class) + ")V", null);
         mw.visitVarInsn(ALOAD, 0);
         mw.visitVarInsn(ALOAD, 1);
         mw.visitMethodInsn(INVOKESPECIAL, JavaBeanSerializer, "<init>", "(" + desc(SerializeBeanInfo.class) + ")V");
@@ -247,7 +247,6 @@ public class ASMSerializerFactory implements Opcodes {
                                   methodName, //
                                   "(L" + JSONSerializer
                                               + ";Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/reflect/Type;I)V", //
-                                  null, //
                                   new String[] { "java/io/IOException" } //
             );
 
@@ -348,8 +347,7 @@ public class ASMSerializerFactory implements Opcodes {
                                           DisableCircularReferenceDetect);
 
             mw = new MethodWriter(cw, ACC_PUBLIC, "writeUnsorted",
-                                  "(L" + JSONSerializer + ";Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/reflect/Type;I)V",
-                                  null, new String[] { "java/io/IOException" });
+                                  "(L" + JSONSerializer + ";Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/reflect/Type;I)V", new String[] { "java/io/IOException" });
 
             mw.visitVarInsn(ALOAD, Context.serializer);
             mw.visitFieldInsn(GETFIELD, JSONSerializer, "out", SerializeWriter_desc);
@@ -388,8 +386,7 @@ public class ASMSerializerFactory implements Opcodes {
                                           nonContext);
 
             mw = new MethodWriter(cw, ACC_PUBLIC, methodName,
-                                  "(L" + JSONSerializer + ";Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/reflect/Type;I)V",
-                                  null, new String[] { "java/io/IOException" });
+                                  "(L" + JSONSerializer + ";Ljava/lang/Object;Ljava/lang/Object;Ljava/lang/reflect/Type;I)V", new String[] { "java/io/IOException" });
 
             mw.visitVarInsn(ALOAD, Context.serializer);
             mw.visitFieldInsn(GETFIELD, JSONSerializer, "out", SerializeWriter_desc);

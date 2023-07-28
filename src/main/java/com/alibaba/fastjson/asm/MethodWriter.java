@@ -99,7 +99,7 @@ public class MethodWriter implements MethodVisitor {
     // Constructor
     // ------------------------------------------------------------------------
 
-    public MethodWriter(final ClassWriter cw, final int access, final String name, final String desc, final String signature, final String[] exceptions){
+    public MethodWriter(final ClassWriter cw, final int access, final String name, final String desc, final String[] exceptions){
         if (cw.firstMethod == null) {
             cw.firstMethod = this;
         } else {

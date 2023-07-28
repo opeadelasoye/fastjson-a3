@@ -110,7 +110,7 @@ public class ASMDeserializerFactory implements Opcodes {
     private void _deserialzeArrayMapping(ClassWriter cw, Context context) {
         MethodVisitor mw = new MethodWriter(cw, ACC_PUBLIC, "deserialzeArrayMapping",
                                             "(L" + DefaultJSONParser + ";Ljava/lang/reflect/Type;Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;",
-                                            null, null);
+                                            null);
 
         defineVarLexer(context, mw);
 
@@ -609,7 +609,7 @@ public class ASMDeserializerFactory implements Opcodes {
 
         MethodVisitor mw = new MethodWriter(cw, ACC_PUBLIC, "deserialze",
                                             "(L" + DefaultJSONParser + ";Ljava/lang/reflect/Type;Ljava/lang/Object;I)Ljava/lang/Object;",
-                                            null, null);
+                                            null);
 
         Label reset_ = new Label();
         Label super_ = new Label();
@@ -1900,7 +1900,7 @@ public class ASMDeserializerFactory implements Opcodes {
         }
 
         MethodVisitor mw = new MethodWriter(cw, ACC_PUBLIC, "<init>",
-                                            "(" + desc(ParserConfig.class) + desc(JavaBeanInfo.class) + ")V", null, null);
+                                            "(" + desc(ParserConfig.class) + desc(JavaBeanInfo.class) + ")V",  null);
         mw.visitVarInsn(ALOAD, 0);
         mw.visitVarInsn(ALOAD, 1);
         mw.visitVarInsn(ALOAD, 2);
@@ -1930,8 +1930,7 @@ public class ASMDeserializerFactory implements Opcodes {
         }
         
         MethodVisitor mw = new MethodWriter(cw, ACC_PUBLIC, "createInstance",
-                                            "(L" + DefaultJSONParser + ";Ljava/lang/reflect/Type;)Ljava/lang/Object;",
-                                            null, null);
+                                            "(L" + DefaultJSONParser + ";Ljava/lang/reflect/Type;)Ljava/lang/Object;", null);
 
         mw.visitTypeInsn(NEW, type(context.getInstClass()));
         mw.visitInsn(DUP);

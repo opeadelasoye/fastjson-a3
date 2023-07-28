@@ -54,14 +54,14 @@ public class TestASM extends TestCase implements Opcodes {
         ClassWriter cw = new ClassWriter();
         cw.visit(V1_5, ACC_PUBLIC + ACC_SUPER, "DateSerializer", "java/lang/Object", new String[] { "com/alibaba/fastjson/serializer/ObjectSerializer" });
 
-        MethodVisitor mw = new MethodWriter(cw, ACC_PUBLIC, "<init>", "()V", null, null);
+        MethodVisitor mw = new MethodWriter(cw, ACC_PUBLIC, "<init>", "()V", null);
         mw.visitVarInsn(ALOAD, 0);
         mw.visitMethodInsn(INVOKESPECIAL, "java/lang/Object", "<init>", "()V");
         mw.visitInsn(RETURN);
         mw.visitMaxs(1, 1);
         mw.visitEnd();
 
-        mw = new MethodWriter(cw, ACC_PUBLIC, "write", "(Lcom/alibaba/fastjson/serializer/JSONSerializer;Ljava/lang/Object;)V", null, new String[] { "java/io/IOException" });
+        mw = new MethodWriter(cw, ACC_PUBLIC, "write", "(Lcom/alibaba/fastjson/serializer/JSONSerializer;Ljava/lang/Object;)V", new String[] { "java/io/IOException" });
 
         mw.visitVarInsn(ALOAD, 1); // serializer
         mw.visitMethodInsn(INVOKEVIRTUAL, "com/alibaba/fastjson/serializer/JSONSerializer", "getWriter", "()Lcom/alibaba/fastjson/serializer/SerializeWriter;");
